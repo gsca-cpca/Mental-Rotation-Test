@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Rotation Mental Test</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/104/three.min.js"></script>
+    <script src="js/OrbitControls.js"></script>
+    <script src="js/WebGL.js"></script>
+    <link rel="stylesheet" href="main.css">
+</head>
+<body>
+
+<canvas id="c"></canvas>
+
+<div id="content">
+    <div id="info">
+        MENTAL ROTATION TEST
+
+    </div>
+</div>
+
+</body>
+<script id="template" type="notjs">
+			<div class="scene"></div>
+			<div class="description">$</div>
+
+
+
+</script>
+<script>
+    var shuffle = function (array) {
+
+        var currentIndex = array.length;
+        var temporaryValue, randomIndex;
+
+        // While there remain elements to shuffle...
+        while (0 !== currentIndex) {
+            // Pick a remaining element...
+            randomIndex = Math.floor(Math.random() * currentIndex);
+            currentIndex -= 1;
+
+            // And swap it with the current element.
+            temporaryValue = array[currentIndex];
+            array[currentIndex] = array[randomIndex];
+            array[randomIndex] = temporaryValue;
+        }
+
+        return array;
+
+    };
+    var dataPoints = [
+        [
+            [
+                {x: 0, y: 0, z: 0},
+                {x: 0, y: 1, z: 0},
+                {x: 0, y: 2, z: 0},
+                {x: 0, y: 3, z: 0},
+                {x: 1, y: 3, z: 0},
+                {x: 2, y: 3, z: 0},
+                {x: 0, y: 0, z: 1},
+                {x: 0, y: 0, z: 2},
+                {x: 0, y: 0, z: 3},
+                {x: -1, y: 0, z: 3}
+            ],
+            [
+                {x: 0, y: 0, z: 0},
+                {x: 0, y: 1, z: 0},
+                {x: 0, y: 2, z: 0},
+                {x: 0, y: 3, z: 0},
+                {x: -1, y: 3, z: 0},
+                {x: -2, y: 3, z: 0},
+                {x: 0, y: 0, z: 1},
+                {x: 0, y: 0, z: 2},
+                {x: 0, y: 0, z: 3},
+                {x: 1, y: 0, z: 3}
+            ]
+        ],
+
+        [
+            [
+                {x: 0, y: 0, z: 0},
+                {x: 0, y: 1, z: 0},
+                {x: 0, y: 2, z: 0},
+                {x: 0, y: 3, z: 0},
+                {x: 1, y: 3, z: 0},
+                {x: 2, y: 3, z: 0},
+                {x: 0, y: 0, z: 1},
+                {x: 0, y: 0, z: 2},
+                {x: 0, y: 0, z: 3},
+                {x: 0, y: -1, z: 3}
+            ],
+            [
+                {x: 0, y: 0, z: 0},
+                {x: 0, y: 1, z: 0},
+                {x: 0, y: 2, z: 0},
+                {x: 0, y: 3, z: 0},
+                {x: -1, y: 3, z: 0},
+                {x: -2, y: 3, z: 0},
+                {x: 0, y: 0, z: 1},
+                {x: 0, y: 0, z: 2},
+                {x: 0, y: 0, z: 3},
+                {x: 0, y: -1, z: 3}
+            ]
+        ],
+        [
+            [
+                {x: 0, y: 0, z: 0},
+                {x: 0, y: 1, z: 0},
+                {x: 0, y: 2, z: 0},
+                {x: 0, y: 3, z: 0},
+                {x: 1, y: 3, z: 0},
+                {x: 2, y: 3, z: 0},
+                {x: 0, y: 0, z: 1},
+                {x: 0, y: 0, z: 2},
+                {x: 0, y: 0, z: 3},
+                {x: -1, y: 0, z: 3}
+            ],
+            [
+                {x: 0, y: 0, z: 0},
+                {x: 0, y: 1, z: 0},
+                {x: 0, y: 2, z: 0},
+                {x: 0, y: 3, z: 0},
+                {x: -1, y: 3, z: 0},
+                {x: -2, y: 3, z: 0},
+                {x: 0, y: 0, z: 1},
+                {x: 0, y: 0, z: 2},
+                {x: 0, y: 0, z: 3},
+                {x: 1, y: 0, z: 3}
+            ]
+        ],
+        [
+            [
+                {x: 0, y: 0, z: 0},
+                {x: 0, y: 1, z: 0},
+                {x: 0, y: 2, z: 0},
+                {x: 0, y: 3, z: 0},
+                {x: 1, y: 3, z: 0},
+                {x: 2, y: 3, z: 0},
+                {x: 0, y: 0, z: 1},
+                {x: 0, y: 0, z: 2},
+                {x: 0, y: 0, z: 3},
+                {x: -1, y: 0, z: 3}
+            ],
+            [
+                {x: 0, y: 0, z: 0},
+                {x: 0, y: 1, z: 0},
+                {x: 0, y: 2, z: 0},
+                {x: 0, y: 3, z: 0},
+                {x: -1, y: 3, z: 0},
+                {x: -2, y: 3, z: 0},
+                {x: 0, y: 0, z: 1},
+                {x: 0, y: 0, z: 2},
+                {x: 0, y: 0, z: 3},
+                {x: 1, y: 0, z: 3}
+            ]
+        ]
+        ,
+        [
+            [
+                {x: 0, y: 0, z: 0},
+                {x: 0, y: 1, z: 0},
+                {x: 0, y: 2, z: 0},
+                {x: 0, y: 3, z: 0},
+                {x: 1, y: 3, z: 0},
+                {x: 2, y: 3, z: 0},
+                {x: 0, y: 0, z: 1},
+                {x: 0, y: 0, z: 2},
+                {x: 0, y: 0, z: 3},
+                {x: -1, y: 0, z: 3}
+            ],
+            [
+                {x: 0, y: 0, z: 0},
+                {x: 0, y: 1, z: 0},
+                {x: 0, y: 2, z: 0},
+                {x: 0, y: 3, z: 0},
+                {x: -1, y: 3, z: 0},
+                {x: -2, y: 3, z: 0},
+                {x: 0, y: 0, z: 1},
+                {x: 0, y: 0, z: 2},
+                {x: 0, y: 0, z: 3},
+                {x: 1, y: 0, z: 3}
+            ]
+        ]
+
+    ];
+    const scaler = 0.209;
+    if (WEBGL.isWebGLAvailable() === false) {
+
+        document.body.appendChild(WEBGL.getWebGLErrorMessage());
+
+    }
+
+    var canvas;
+    const Meshes = [];
+    var scenes = [], renderer;
+
+    init();
+    animate();
+
+    function init() {
+
+        canvas = document.getElementById("c");
+
+        var geometries = [
+            new THREE.BoxBufferGeometry(0.2, 0.2, 0.2),
+            new THREE.SphereBufferGeometry(0.5, 12, 8),
+            new THREE.DodecahedronBufferGeometry(0.5),
+            new THREE.CylinderBufferGeometry(0.5, 0.5, 1, 12)
+        ];
+
+
+        geometries.forEach(g => {
+            let mat = new THREE.MeshStandardMaterial({
+
+                color: new THREE.Color().setHSL(Math.random(), 1, 0.75),
+                roughness: 0.5,
+                metalness: 0,
+                flatShading: true
+
+            });
+            let mesh = new THREE.Mesh(g, mat);
+            Meshes.push(mesh)
+        });
+
+        var template = document.getElementById("template").text;
+        var content = document.getElementById("content");
+
+        const numRows = 4;
+        const numCols = 5;
+        for (let i = 0; i < numRows; i++) {
+            let _row = document.createElement('div');
+            _row.className = 'row';
+            var material = new THREE.MeshStandardMaterial({
+
+                color: new THREE.Color().setHSL(Math.random(), 1, 0.75),
+                roughness: 0.5,
+                metalness: 0,
+                flatShading: true
+
+            });
+
+            //Create an array with four elements, two reals and two faces
+            var _answers = [dataPoints[i][0], dataPoints[i][0], dataPoints[i][1], dataPoints[i][1]];
+            shuffle(_answers);
+            for (let j = 0; j < numCols; j++) {
+                var scene = new THREE.Scene();
+                // make a list item
+                var element = document.createElement("div");
+                if (j === 0) {
+                    element.className = "list-item";
+                    element.innerHTML = template.replace('$', `Figure ${i + 1}`);
+
+                } else {
+                    element.className = "list-item";
+                    element.innerHTML = template.replace('$', `<input type="checkbox">`);
+                }
+
+
+                // Look up the element that represents the area
+                // we want to render the scene
+                scene.userData.element = element.querySelector(".scene");
+                _row.appendChild(element);
+
+                var camera = new THREE.PerspectiveCamera(50, 1, 1, 10);
+                camera.position.z = 2;
+                scene.userData.camera = camera;
+
+                var controls = new THREE.OrbitControls(scene.userData.camera, scene.userData.element);
+                controls.minDistance = 2;
+                controls.maxDistance = 5;
+                controls.enablePan = false;
+                controls.enableZoom = false;
+                scene.userData.controls = controls;
+
+                // add one random mesh to each scene
+                var geometry = new THREE.BoxBufferGeometry(0.2, 0.2, 0.2);
+
+
+                let container = new THREE.Group();
+                let sign = Math.round(Math.random());
+
+                //If the first element then get the first
+                if (j === 0) {
+                    for (let ii = 0; ii < 10; ii++) {
+
+                        let mesh = new THREE.Mesh(geometry, material);
+                        let posX = dataPoints[i][0][ii].x * scaler;
+                        let posY = dataPoints[i][0][ii].y * scaler;
+                        let posZ = dataPoints[i][0][ii].z * scaler;
+                        mesh.position.set(posX, posY, posZ);
+                        container.add(mesh);
+                    }
+                } else {
+
+                    for (let ii = 0; ii < 10; ii++) {
+                        let mesh = new THREE.Mesh(geometry, material);
+                        let ans = _answers[j - 1];
+                        let posX = ans[ii].x * scaler;
+                        let posY = ans[ii].y * scaler;
+                        let posZ = ans[ii].z * scaler;
+                        mesh.position.set(posX, posY, posZ);
+                        container.add(mesh);
+                    }
+                }
+
+                container.rotation.x = Math.random()*Math.PI;
+                container.rotation.y = Math.random()*Math.PI/2;
+                container.rotation.z = Math.random()**Math.PI/4;
+                scene.add(container);
+                //scene.add( Meshes[i] );
+
+                scene.add(new THREE.HemisphereLight(0xaaaaaa, 0x444444));
+
+                var light = new THREE.DirectionalLight(0xffffff, 0.5);
+                light.position.set(1, 1, 1);
+                scene.add(light);
+
+                scenes.push(scene);
+            }
+
+            content.appendChild(_row);
+        }
+
+
+        renderer = new THREE.WebGLRenderer({canvas: canvas, antialias: true});
+        renderer.setClearColor(0xffffff, 1);
+        renderer.setPixelRatio(window.devicePixelRatio);
+
+    }
+
+    function updateSize() {
+
+        var width = canvas.clientWidth;
+        var height = canvas.clientHeight;
+
+        if (canvas.width !== width || canvas.height !== height) {
+
+            renderer.setSize(width, height, false);
+
+        }
+
+    }
+
+    function animate() {
+
+        render();
+        requestAnimationFrame(animate);
+
+    }
+
+    function render() {
+
+        updateSize();
+
+        canvas.style.transform = `translateY(${window.scrollY}px)`;
+
+        renderer.setClearColor(0xffffff);
+        renderer.setScissorTest(false);
+        renderer.clear();
+
+        renderer.setClearColor(0xe0e0e0);
+        renderer.setScissorTest(true);
+
+        scenes.forEach(function (scene) {
+
+            // so something moves
+            //scene.children[ 0 ].rotation.y = Date.now() * 0.0005;
+
+            // get the element that is a place holder for where we want to
+            // draw the scene
+            var element = scene.userData.element;
+
+            // get its position relative to the page's viewport
+            var rect = element.getBoundingClientRect();
+
+            // check if it's offscreen. If so skip it
+            if (rect.bottom < 0 || rect.top > renderer.domElement.clientHeight ||
+                rect.right < 0 || rect.left > renderer.domElement.clientWidth) {
+
+                return; // it's off screen
+
+            }
+
+            // set the viewport
+            var width = rect.right - rect.left;
+            var height = rect.bottom - rect.top;
+            var left = rect.left;
+            var bottom = renderer.domElement.clientHeight - rect.bottom;
+
+            renderer.setViewport(left, bottom, width, height);
+            renderer.setScissor(left, bottom, width, height);
+
+            var camera = scene.userData.camera;
+
+            //camera.aspect = width / height; // not changing in this example
+            //camera.updateProjectionMatrix();
+
+            //scene.userData.controls.update();
+
+            renderer.render(scene, camera);
+
+        });
+
+    }
+
+</script>
+</html>
