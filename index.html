@@ -12,12 +12,8 @@
 <canvas id="c"></canvas>
 
 <div id="content">
-
     <div id="info">
-
         PLEASE SELECT THE TWO OBJECTS ON THE RIGHT CORRESPONDING TO THE ONE ON THE LEFT FIGURE (OBJECTS CAN BE ROTATED) <button id="btnSubmit" style="margin-left: 15px">Submit</button>
-
-
     </div>
 </div>
 
@@ -407,22 +403,33 @@
     }
     let btnSubmit = document.getElementById("btnSubmit")
     btnSubmit.onclick = function () {
+        let attempt = 0;
+        let total = 8;
+        let uncorrect = 0;
+        let correct =0;
         let rows = document.querySelectorAll(".row");
         rows.forEach(row=>{
             let ansCheck = row.querySelectorAll("input");
             ansCheck.forEach(a=>{
                 if(a.checked){
+                    attempt++;
                     let parentDiv = a.parentElement.parentElement;
                     if(parentDiv.getAttribute("answer")==="false"){
+                        uncorrect++;
                         a.parentElement.style.backgroundColor = 'red';
+                    }else{
+                        correct++;
                     }
-
                 }else{
                     a.parentElement.style.backgroundColor = 'white';
                 }
             })
 
         })
+        let info = document.getElementById("info");
+        let _msg = document.createElement("div");
+        _msg.innerText = `Total = ${total}, attempt = ${attempt}, incorrect = ${uncorrect}, result = ${100*correct/total}%`;
+        info.appendChild(_msg)
     }
 </script>
 </html>
