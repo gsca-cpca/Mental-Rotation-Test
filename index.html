@@ -9,23 +9,23 @@
     <link rel="stylesheet" href="main.css">
 </head>
 <body>
-
 <canvas id="c"></canvas>
 
 <div id="content">
+
     <div id="info">
-        MENTAL ROTATION TEST
+
+        PLEASE SELECT THE TWO OBJECTS ON THE RIGHT CORRESPONDING TO THE ONE ON THE LEFT FIGURE (OBJECTS CAN BE ROTATED) <button id="btnSubmit" style="margin-left: 15px">Submit</button>
+
 
     </div>
 </div>
+
 
 </body>
 <script id="template" type="notjs">
 			<div class="scene"></div>
 			<div class="description">$</div>
-
-
-
 </script>
 <script>
     var shuffle = function (array) {
@@ -48,6 +48,7 @@
         return array;
 
     };
+    // Define 5 sets of figures, each set contains two opposite shapes
     var dataPoints = [
         [
             [
@@ -75,7 +76,6 @@
                 {x: 1, y: 0, z: 3}
             ]
         ],
-
         [
             [
                 {x: 0, y: 0, z: 0},
@@ -153,8 +153,7 @@
                 {x: 0, y: 0, z: 3},
                 {x: 1, y: 0, z: 3}
             ]
-        ]
-        ,
+        ],
         [
             [
                 {x: 0, y: 0, z: 0},
@@ -239,8 +238,11 @@
 
             });
 
-            //Create an array with four elements, two reals and two faces
-            var _answers = [dataPoints[i][0], dataPoints[i][0], dataPoints[i][1], dataPoints[i][1]];
+            //Create an array with four elements, two reals and two fakes
+            let _shape1 = {data:dataPoints[i][0],answer:true};
+            let _shape2 = {data:dataPoints[i][1],answer:false};
+            // var _answers = [dataPoints[i][0], dataPoints[i][0], dataPoints[i][1], dataPoints[i][1]];
+            var _answers = [_shape1, _shape1, _shape2, _shape2];
             shuffle(_answers);
             for (let j = 0; j < numCols; j++) {
                 var scene = new THREE.Scene();
@@ -252,6 +254,7 @@
 
                 } else {
                     element.className = "list-item";
+                    element.setAttribute("answer",_answers[j-1].answer)
                     element.innerHTML = template.replace('$', `<input type="checkbox">`);
                 }
 
@@ -294,7 +297,7 @@
 
                     for (let ii = 0; ii < 10; ii++) {
                         let mesh = new THREE.Mesh(geometry, material);
-                        let ans = _answers[j - 1];
+                        let ans = _answers[j - 1].data;
                         let posX = ans[ii].x * scaler;
                         let posY = ans[ii].y * scaler;
                         let posZ = ans[ii].z * scaler;
@@ -402,6 +405,24 @@
         });
 
     }
+    let btnSubmit = document.getElementById("btnSubmit")
+    btnSubmit.onclick = function () {
+        let rows = document.querySelectorAll(".row");
+        rows.forEach(row=>{
+            let ansCheck = row.querySelectorAll("input");
+            ansCheck.forEach(a=>{
+                if(a.checked){
+                    let parentDiv = a.parentElement.parentElement;
+                    if(parentDiv.getAttribute("answer")==="false"){
+                        a.parentElement.style.backgroundColor = 'red';
+                    }
 
+                }else{
+                    a.parentElement.style.backgroundColor = 'white';
+                }
+            })
+
+        })
+    }
 </script>
 </html>
