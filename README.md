@@ -1,4 +1,3 @@
 # mental_rotation
 
-https://alex-nguyen.github.io/mental_rotation/
-
+https://gsca-cpca.github.io/Mental-Rotation-Test/
